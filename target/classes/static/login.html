@@ -39,7 +39,7 @@
 									username:
 								</td>
 								<td valign="middle" align="left">
-									<input type="text" class="inputgri" name="name" />
+									<input type="text" class="inputgri" v-model="user.username" name="name" />
 								</td>
 							</tr>
 							<tr>
@@ -47,12 +47,12 @@
 									password:
 								</td>
 								<td valign="middle" align="left">
-									<input type="password" class="inputgri" name="pwd" />
+									<input type="password" class="inputgri" v-model="user.password" name="pwd" />
 								</td>
 							</tr>
 						</table>
 						<p>
-							<input type="submit" class="button" value="Submit &raquo;" />
+							<input type="button" @click="login" class="button" value="Submit &raquo;" />
 							&nbsp;&nbsp;
 							<a href="">注册</a>
 						</p>
@@ -67,3 +67,30 @@
 		</div>
 	</body>
 </html>
+<script src="/ems_vue/js/vue.js"></script>
+<script src="/ems_vue/js/axios.min.js"></script>
+<script>
+
+	var app=new Vue({
+		el:"#wrap",
+		data:{
+			user:{},//用来保存用户数据
+		},
+		methods:{
+			//用户登录
+			login(){
+			//	发送登录请求
+				axios.post("http://localhost:8989/ems_vue/user/login",this.user).then(res=>{
+					console.log(res.data);
+					if(res.data.state){
+						alert(res.data.msg+",点击确定进入主页！");
+						location.href="/ems_vue/emplist.html";
+					}
+					else{
+						alert(res.data.msg);
+					}
+				})
+			}
+		}
+	})
+</script>

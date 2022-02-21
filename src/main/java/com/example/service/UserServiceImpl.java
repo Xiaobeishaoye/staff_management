@@ -5,6 +5,7 @@ import com.example.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import java.util.Date;
 
@@ -14,6 +15,24 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     private UserDAO userDAO;
+
+    @Override
+    public User login(User user) {
+//        1.根据用户输入的用户名进行查询
+        User userDB =userDAO.findByUserName(user.getUsername());
+        if(!ObjectUtils.isEmpty(userDB)){
+//            2.比较密码
+            if(userDB.getPassword().equals(user.getPassword())){
+                return userDB;
+            }
+            else{
+                throw new RuntimeException("密码输入不正确！");
+            }
+        }
+        else{
+            throw new RuntimeException("用户名输入错误！");
+        }
+    }
 
     @Override
     public void register(User user){
@@ -31,4 +50,6 @@ public class UserServiceImpl implements UserService{
             throw new RuntimeException("用户名已存在！");
         }
     }
+
+
 }
