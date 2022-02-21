@@ -37,7 +37,7 @@
 									用户名:
 								</td>
 								<td valign="middle" align="left">
-									<input type="text" class="inputgri" name="username" />
+									<input type="text" class="inputgri" v-model="user.username"/>
 								</td>
 							</tr>
 							<tr>
@@ -45,7 +45,7 @@
 									真实姓名:
 								</td>
 								<td valign="middle" align="left">
-									<input type="text" class="inputgri" name="name" />
+									<input type="text" class="inputgri" v-model="user.realname"/>
 								</td>
 							</tr>
 							<tr>
@@ -53,7 +53,7 @@
 									密码:
 								</td>
 								<td valign="middle" align="left">
-									<input type="password" class="inputgri" name="pwd" />
+									<input type="password" class="inputgri" v-model="user.password" />
 								</td>
 							</tr>
 							<tr>
@@ -62,9 +62,9 @@
 								</td>
 								<td valign="middle" align="left">
 									男
-									<input type="radio" class="inputgri" name="sex" value="m" checked="checked"/>
+									<input type="radio" class="inputgri" v-model="user.sex" value="男" checked="checked"/>
 									女
-									<input type="radio" class="inputgri" name="sex" value="f"/>
+									<input type="radio" class="inputgri" v-model="user.sex" value="女"/>
 								</td>
 							</tr>
 							
@@ -73,7 +73,7 @@
 									验证码:
 								</td>
 								<td valign="middle" align="left">
-									<input type="text" class="inputgri" name="number" />
+									<input type="text" v-model="code" class="inputgri" />
 								</td>
 								<td>
 									<img id="num" :src="url" />
@@ -82,7 +82,7 @@
 							</tr>
 						</table>
 						<p>
-							<input type="submit" class="button" value="Submit &raquo;" />
+							<input type="button" @click="register" class="button" value="Submit &raquo;" />
 						</p>
 					</form>
 				</div>
@@ -102,6 +102,10 @@
 		el:"#wrap",
 		data:{
 			url:"",
+			user:{
+				sex:"男"
+			},
+			code:"",
 		},
 		methods:{
 			//用来更换验证码
@@ -112,8 +116,20 @@
 			getSrc(){
 				var _this=this;
 				axios.get("http://localhost:8989/ems_vue/user/getImage?time="+Math.random()).then(res=>{
-					console.log(res.data);
 					_this.url=res.data;
+				})
+			},
+			//用来注册用户信息
+			register(){
+				axios.post("http://localhost:8989/ems_vue/user/register?code="+this.code,this.user).then(res=>{
+					console.log(res.data);
+					if(res.data.state){
+						alert(res.data.msg+",点击确定跳转至登录页面！");
+						location.href="/ems_vue/login.html";
+					}
+					else{
+						alert(res.data.msg);
+					}
 				})
 			}
 		},
