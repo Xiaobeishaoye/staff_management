@@ -34,6 +34,7 @@ public class UserController {
             User userDB=userService.login(user);
             map.put("state",true);
             map.put("msg","登陆成功！");
+            map.put("user",userDB);
         } catch (Exception e) {
             e.printStackTrace();
             map.put("state",false);
