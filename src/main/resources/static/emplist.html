@@ -13,12 +13,12 @@
                 <p>
                     2009/11/20
                     <br/>
-                    安全退出
+                    <a href="javascript:;" @click="logout">安全退出</a>
                 </p>
             </div>
             <div id="topheader">
                 <h1 id="title">
-                    <a href="#">main</a>
+                    <a href="/ems_vue/emplist.html">main</a>
                 </h1>
             </div>
             <div id="navigation">
@@ -115,7 +115,11 @@
             user:{}//用来存放用户登录信息
         },
         methods: {//自定义函数
-
+        //处理安全退出
+            logout(){
+                localStorage.removeItem("user");
+                location.reload(true);//刷新页面
+            }
         },
         created() {//生命周期函数
             var userString = localStorage.getItem("user");
