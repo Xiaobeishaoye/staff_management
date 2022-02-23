@@ -8,4 +8,6 @@ import java.util.List;
 @Mapper
 public interface EmpDAO {
     List<Emp> findAll();
+
+    void save(Emp emp);
 }

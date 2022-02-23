@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface EmpService {
     List<Emp> findAll();
+
+    void save(Emp emp);
 }

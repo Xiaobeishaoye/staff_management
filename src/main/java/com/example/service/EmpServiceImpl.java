@@ -16,9 +16,16 @@ public class EmpServiceImpl implements EmpService{
     @Autowired
     private EmpDAO empDAO;
 
+
+    @Override
+    public void save(Emp emp) {
+        empDAO.save(emp);
+    }
+
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
     public List<Emp> findAll() {
         return empDAO.findAll();
     }
+
 }
