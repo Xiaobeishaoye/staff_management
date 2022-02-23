@@ -10,4 +10,8 @@ public interface EmpDAO {
     List<Emp> findAll();
 
     void save(Emp emp);
+
+    void delete(String id);
+
+    Emp findOne(String id);
 }

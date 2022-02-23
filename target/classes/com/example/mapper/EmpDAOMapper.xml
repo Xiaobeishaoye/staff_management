@@ -13,4 +13,13 @@
     <insert id="save" parameterType="Emp" useGeneratedKeys="true" keyProperty="id">
         insert into emp.t_emp values (#{id},#{name},#{path},#{salary},#{age})
     </insert>
+    <delete id="delete" parameterType="String">
+          delete from emp.t_emp where id=#{id}
+    </delete>
+
+<!--    findOne-->
+    <select id="findOne" parameterType="String" resultType="Emp">
+        select id,name,path,salary,age from emp.t_emp
+        where id=#{id}
+    </select>
 </mapper>

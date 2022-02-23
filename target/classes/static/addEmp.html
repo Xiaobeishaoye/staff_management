@@ -121,7 +121,7 @@
 				}).then(res => {
 					console.log(res.data);
 					if(res.data.state){
-						if(window.confirm(res.data.msg+",点击确定跳转到列表页面！")){
+						if(window.confirm(res.data.msg+"点击确定跳转到列表页面！")){
 							location.href="/ems_vue/emplist.html";
 						}else{
 							_this.emp={};

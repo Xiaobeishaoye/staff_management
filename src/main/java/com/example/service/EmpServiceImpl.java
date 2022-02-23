@@ -17,9 +17,20 @@ public class EmpServiceImpl implements EmpService{
     private EmpDAO empDAO;
 
 
+
     @Override
     public void save(Emp emp) {
         empDAO.save(emp);
+    }
+
+    @Override
+    public void delete(String id) {
+        empDAO.delete(id);
+    }
+
+    @Override
+    public Emp findOne(String id) {
+        return empDAO.findOne(id);
     }
 
     @Override
