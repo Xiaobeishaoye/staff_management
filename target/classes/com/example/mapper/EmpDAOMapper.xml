@@ -5,6 +5,9 @@
 
 
 <mapper namespace="com.example.dao.EmpDAO">
+
+    <cache type="com.example.cache.RedisCache"/>
+
 <!--    findAll-->
     <select id="findAll" resultType="Emp">
         select id,name,path,salary,age from emp.t_emp
