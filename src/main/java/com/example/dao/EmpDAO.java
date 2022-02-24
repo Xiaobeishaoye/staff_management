@@ -14,4 +14,6 @@ public interface EmpDAO {
     void delete(String id);
 
     Emp findOne(String id);
+
+    void update(Emp emp);
 }

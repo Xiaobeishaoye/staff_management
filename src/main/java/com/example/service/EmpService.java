@@ -12,4 +12,6 @@ public interface EmpService {
     void delete(String id);
 
     Emp findOne(String id);
+
+    void update(Emp emp);
 }

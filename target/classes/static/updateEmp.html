@@ -40,7 +40,15 @@
 									id:
 								</td>
 								<td valign="middle" align="left">
-									1
+									{{emp.id}}
+								</td>
+							</tr>
+							<tr>
+								<td valign="middle" align="right">
+									old photo:
+								</td>
+								<td valign="middle" align="left">
+									<img :src="'/ems_vue/'+emp.path" style="height: 60px;" alt="">
 								</td>
 							</tr>
 							<tr>
@@ -48,7 +56,7 @@
 									name:
 								</td>
 								<td valign="middle" align="left">
-									<input type="text" class="inputgri" name="name" value="zhangshan"/>
+									<input type="text" class="inputgri" v-model="emp.name" />
 								</td>
 							</tr>
 							<tr>
@@ -56,7 +64,7 @@
 									photo:
 								</td>
 								<td valign="middle" align="left">
-									<input type="file" name="photo" />
+									<input type="file" ref="photo" name="photo" />
 								</td>
 							</tr>
 							<tr>
@@ -64,7 +72,7 @@
 									salary:
 								</td>
 								<td valign="middle" align="left">
-									<input type="text" class="inputgri" name="salary" value="20000"/>
+									<input type="text" class="inputgri" v-model="emp.salary"/>
 								</td>
 							</tr>
 							<tr>
@@ -72,12 +80,12 @@
 									age:
 								</td>
 								<td valign="middle" align="left">
-									<input type="text" class="inputgri" name="age" value="20"/>
+									<input type="text" class="inputgri" v-model="emp.age"/>
 								</td>
 							</tr>
 						</table>
 						<p>
-							<input type="submit" class="button" value="Confirm" />
+							<input type="button" @click="editEmp" class="button" value="Confirm" />
 						</p>
 					</form>
 				</div>
@@ -97,24 +105,66 @@
 	var app = new Vue({
 		el: "#wrap",
 		data: {//数据
-			user:{}//用来存放用户登录信息
+			user: {},//用来存放用户登录信息
+			emp:{}
 		},
 		methods: {//自定义函数
 			//处理安全退出
-			logout(){
+			logout() {
 				localStorage.removeItem("user");
 				location.reload(true);//刷新页面
+			},
+			//处理员工信息修改
+			editEmp(){
+				console.log(this.emp);
+				console.log(this.$refs.photo.files[0]);
+				//文件上传时 请求方式必须是偶post enctype必须为mutipart/form-data
+				var formData=new FormData();
+				formData.append("id",this.emp.id);
+				formData.append("name",this.emp.name);
+				formData.append("path",this.emp.path);
+				formData.append("salary",this.emp.salary);
+				formData.append("age",this.emp.age);
+				formData.append("photo", this.$refs.photo.files[0]);
+				var _this=this;
+				axios({
+					method: "post",
+					url: "http://localhost:8989/ems_vue/emp/update",
+					data: formData,
+					headers: {
+						'content-type': 'multipart/form-data'
+					}
+				}).then(res => {
+					console.log(res.data);
+					if(res.data.state){
+						if(window.confirm(res.data.msg+"点击确定跳转到列表页面！")){
+							location.href="/ems_vue/emplist.html";
+						}
+					}
+					else{
+						alert(res.data.msg);
+					}
+				})
 			}
 		},
 		created() {//生命周期函数
 			var userString = localStorage.getItem("user");
-			if(userString){
+			if (userString) {
 				this.user = JSON.parse(userString);
-			}
-			else{
+			} else {
 				alert("您尚未登录，点击确定跳转至登陆页面！");
-				location.href="/ems_vue/login.html";
+				location.href = "/ems_vue/login.html";
 			}
+			//获取id信息
+			var start = location.href.lastIndexOf("=");
+			var id = location.href.substring(start + 1);
+			console.log(id);
+			//查询1个人信息
+			var _this=this;
+			axios.get("http://localhost:8989/ems_vue/emp/findOne?id="+id).then(res=>{
+				console.log(res.data);
+				_this.emp=res.data;
+			})
 		}
-	})
+	});
 </script>

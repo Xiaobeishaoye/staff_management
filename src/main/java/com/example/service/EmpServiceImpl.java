@@ -34,6 +34,11 @@ public class EmpServiceImpl implements EmpService{
     }
 
     @Override
+    public void update(Emp emp) {
+        empDAO.update(emp);
+    }
+
+    @Override
     @Transactional(propagation = Propagation.SUPPORTS)
     public List<Emp> findAll() {
         return empDAO.findAll();

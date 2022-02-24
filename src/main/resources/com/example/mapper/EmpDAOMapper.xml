@@ -22,4 +22,14 @@
         select id,name,path,salary,age from emp.t_emp
         where id=#{id}
     </select>
+<!--    update-->
+    <update id="update" parameterType="Emp" >
+        update emp.t_emp set
+        name=#{name},
+        path=#{path},
+        salary=#{salary},
+        age=#{age}
+        where
+        id=#{id}
+    </update>
 </mapper>

@@ -28,6 +28,40 @@ public class EmpController {
     @Value("${photo.dir}")
     private String realPath;
 
+    //
+//修改员工信息
+    @PostMapping("update")
+    public Map<String, Object> update(Emp emp, MultipartFile photo) throws IOException {
+        log.info("员工信息：[{}]", emp.toString());
+        Map<String, Object> map = new HashMap<>();
+        try {
+            if(photo!=null&&photo.getSize()!=0){
+                log.info("头像信息：[{}]", photo.getOriginalFilename());
+                //        头像保存
+                String newFileName = UUID.randomUUID().toString() + "." + FilenameUtils.getExtension(photo.getOriginalFilename());
+                photo.transferTo(new File(realPath, newFileName));
+//        设置头像地址
+                emp.setPath(newFileName);
+            }
+//        保存员工信息
+            empService.update(emp);
+            map.put("state", true);
+            map.put("msg", "员工信息保存成功！");
+        } catch (IOException e) {
+            e.printStackTrace();
+            map.put("state", false);
+            map.put("msg", "员工信息保存失败！");
+        }
+        return map;
+    }
+
+    //根据id查询员工信息实现
+    @GetMapping("findOne")
+    public Emp findOne(String id) {
+        log.info("查询员工信息的id：[{}]", id);
+        return empService.findOne(id);
+    }
+
     //    删除员工信息的实现
     @GetMapping("delete")
     public Map<String, Object> delete(String id) {
@@ -36,8 +70,8 @@ public class EmpController {
         try {
             //删除员工头像
             Emp emp = empService.findOne(id);
-            File file =new File(realPath,emp.getPath());
-            if(file.exists())file.delete();//删除头像
+            File file = new File(realPath, emp.getPath());
+            if (file.exists()) file.delete();//删除头像
 //            删除员工信息
             empService.delete(id);
             map.put("state", true);
