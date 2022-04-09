@@ -6,6 +6,7 @@
 
 <mapper namespace="com.example.dao.EmpDAO">
 
+    <!--二级缓存-->
     <cache type="com.example.cache.RedisCache"/>
 
 <!--    findAll-->
